@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuperBank Admin Dashboard 🛡️</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom Admin Styles -->
+    <link rel="stylesheet" href="admin.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white font-['Outfit'] h-screen overflow-hidden flex">
+
+    <!-- ========================================= -->
+    <!-- 🚪 AUTHENTICATION CHECK -->
+    <!-- ========================================= -->
+    <div id="auth-overlay" class="fixed inset-0 bg-gray-900 z-50 flex flex-col items-center justify-center">
+        <div class="logo-circle mb-4 text-4xl">🛡️</div>
+        <h2 id="auth-status-message" class="text-2xl font-bold text-white mb-2">Verifying Admin Access...</h2>
+        <p class="text-gray-400">Please wait while we check your credentials.</p>
+        <button id="auth-login-btn" class="hidden mt-6 btn-primary">Go to Login</button>
+    </div>
+
+    <!-- ========================================= -->
+    <!-- 👈 SIDEBAR NAVIGATION -->
+    <!-- ========================================= -->
+    <aside class="w-64 bg-gray-800 border-r border-gray-700 flex flex-col hidden" id="admin-sidebar">
+        <!-- Brand -->
+        <div class="h-16 flex items-center px-6 border-b border-gray-700">
+            <span class="text-2xl mr-2">🛡️</span>
+            <span class="font-bold text-lg tracking-wide text-blue-400">SuperBank Admin</span>
+        </div>
+
+        <!-- Links -->
+        <nav class="flex-1 py-6 px-4 space-y-2 overflow-y-auto">
+            <button class="nav-btn active" data-target="users">
+                <span class="mr-3">👥</span> User Management
+            </button>
+            <button class="nav-btn" data-target="refunds">
+                <span class="mr-3">💸</span> Refunds
+            </button>
+            <button class="nav-btn" data-target="transactions">
+                <span class="mr-3">📊</span> All Transactions
+            </button>
+            <button class="nav-btn" data-target="activity">
+                <span class="mr-3">📜</span> Activity Logs
+            </button>
+            <button class="nav-btn" data-target="notifications">
+                <span class="mr-3">🔔</span> Notifications
+            </button>
+            <button class="nav-btn" data-target="profile">
+                <span class="mr-3">⚙️</span> Admin Profile
+            </button>
+        </nav>
+
+        <!-- Admin User Info & Logout -->
+        <div class="p-4 border-t border-gray-700">
+            <p id="admin-name" class="text-sm font-semibold truncate text-gray-300">Admin User</p>
+            <button id="admin-logout-btn" class="mt-2 w-full btn-danger text-sm py-2">👋 Log Out</button>
+        </div>
+    </aside>
+
+    <!-- ========================================= -->
+    <!-- 📄 MAIN CONTENT AREA -->
+    <!-- ========================================= -->
+    <main class="flex-1 flex flex-col hidden" id="admin-main">
+        
+        <!-- Header -->
+        <header class="h-16 bg-gray-800 border-b border-gray-700 flex items-center justify-between px-8">
+            <h1 id="page-title" class="text-xl font-bold text-white">Dashboard Overview</h1>
+            <div class="flex items-center gap-4">
+                <a href="index.html?view=user" class="text-sm text-blue-400 hover:text-blue-300">View Main App ↗</a>
+            </div>
+        </header>
+
+        <!-- Dynamic Content Sections -->
+        <div class="flex-1 overflow-y-auto p-8 relative">
+
+            <!-- 👥 USERS SECTION -->
+            <section id="section-users" class="admin-section active">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold">User Management</h2>
+                    <button id="refresh-users-btn" class="btn-secondary">🔄 Refresh</button>
+                </div>
+                <div class="table-container">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Balance</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body">
+                            <!-- Populated by JS -->
+                            <tr><td colspan="6" class="text-center py-4 text-gray-400">Loading users...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 💸 REFUNDS SECTION -->
+            <section id="section-refunds" class="admin-section hidden">
+                <h2 class="text-2xl font-bold mb-6">Process a Refund</h2>
+                <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 max-w-md">
+                    <form id="refund-form" class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">User's Email</label>
+                            <input type="email" id="refund-email" class="input-dark w-full" required placeholder="user@example.com">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Refund Amount (₦)</label>
+                            <input type="number" id="refund-amount" class="input-dark w-full" required min="1">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Reason for Refund</label>
+                            <input type="text" id="refund-reason" class="input-dark w-full" required placeholder="e.g. Failed previous transfer">
+                        </div>
+                        <button type="submit" class="btn-success w-full mt-2">✅ Process Refund</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- 📊 TRANSACTIONS SECTION -->
+            <section id="section-transactions" class="admin-section hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold">Global Transactions</h2>
+                    <button id="refresh-tx-btn" class="btn-secondary">🔄 Refresh</button>
+                </div>
+                <div class="table-container">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr>
+                                <th>Date/Time</th>
+                                <th>User Email</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                                <th>Amount</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tx-table-body">
+                            <!-- Populated by JS -->
+                            <tr><td colspan="6" class="text-center py-4 text-gray-400">Loading transactions...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 📜 ACTIVITY LOGS SECTION -->
+            <section id="section-activity" class="admin-section hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold">System Activity Logs</h2>
+                    <button id="refresh-logs-btn" class="btn-secondary">🔄 Refresh</button>
+                </div>
+                <div class="table-container">
+                    <table class="w-full text-left text-sm">
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>User Email</th>
+                                <th>Action Type</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logs-table-body">
+                            <!-- Populated by JS -->
+                            <tr><td colspan="4" class="text-center py-4 text-gray-400">Loading logs...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 🔔 NOTIFICATIONS SECTION -->
+            <section id="section-notifications" class="admin-section hidden">
+                <h2 class="text-2xl font-bold mb-6">Send Notifications</h2>
+                <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 max-w-xl">
+                    <form id="notification-form" class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Target User</label>
+                            <select id="notif-target" class="input-dark w-full text-white cursor-pointer">
+                                <option value="all">📢 ALL USERS (Global Broadcast)</option>
+                                <option value="specific">👤 SPECIFIC USER (By Email)</option>
+                            </select>
+                        </div>
+                        <div id="notif-email-group" class="hidden">
+                            <label class="block text-sm text-gray-400 mb-1">Specific User Email</label>
+                            <input type="email" id="notif-email" class="input-dark w-full" placeholder="user@example.com">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Notification Title</label>
+                            <input type="text" id="notif-title" class="input-dark w-full" required placeholder="System Update">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Message Content</label>
+                            <textarea id="notif-message" class="input-dark w-full h-32 resize-none" required placeholder="Type your message here..."></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary w-full mt-2">📤 Send Notification</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- ⚙️ PROFILE SECTION -->
+            <section id="section-profile" class="admin-section hidden">
+                <h2 class="text-2xl font-bold mb-6">Admin Profile</h2>
+                <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 max-w-md">
+                    <form id="admin-profile-form" class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Display Name</label>
+                            <input type="text" id="admin-profile-name" class="input-dark w-full" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Email <span class="text-xs text-gray-500">(Cannot be changed)</span></label>
+                            <input type="email" id="admin-profile-email" class="input-dark w-full opacity-50 cursor-not-allowed" disabled>
+                        </div>
+                        <button type="submit" class="btn-primary w-full mt-2">💾 Save Profile</button>
+                    </form>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- 🔔 Toast Notification -->
+    <div id="admin-toast" class="toast hidden">
+        <span id="toast-message">Action complete</span>
+    </div>
+
+    <!-- 🔔 Error Catcher -->
+    <script>
+    window.addEventListener("error", function(e) {
+        document.getElementById('auth-status-message').innerHTML = '<span class="text-red-400">CRASH: ' + e.message + '</span>';
+    });
+    window.addEventListener("unhandledrejection", function(e) {
+        document.getElementById('auth-status-message').innerHTML = '<span class="text-red-400">PROMISE REJECTED: ' + e.reason + '</span>';
+    });
+    </script>
+    <!-- 🔥 Firebase SDK -->
+    <script type="module" src="admin.js?v=2"></script>
+</body>
+</html>

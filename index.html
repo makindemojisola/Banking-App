@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Super Banking App! 🏦</title>
+    <meta name="description" content="A fun and simple banking app to manage your money!">
+
+    <!-- 🎨 Tailwind CSS - Our super painting tool from the internet! -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- 🖌️ Our own custom paint file -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- ✨ Google Font - A pretty handwriting style! -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="min-h-screen font-['Outfit']">
+
+    <!-- ========================================= -->
+    <!-- 🚪 PAGE 1: THE LOGIN PAGE (The Front Door) -->
+    <!-- ========================================= -->
+    <div id="login-page" class="page active">
+        <div class="login-container">
+            <!-- The bank logo and title -->
+            <div class="text-center mb-8">
+                <div class="logo-circle">🏦</div>
+                <h1 class="text-3xl font-bold mt-4 text-white">SuperBank</h1>
+                <p class="text-blue-200 mt-2">Your money, safe and sound! ✨</p>
+            </div>
+
+            <!-- The login form - where you type your name and password -->
+            <form id="login-form" class="space-y-5">
+                <div>
+                    <label for="login-email" class="block text-sm font-medium text-blue-100 mb-1">📧 Email</label>
+                    <input type="email" id="login-email" placeholder="e.g. alex@superbank.com" class="input-field"
+                        required>
+                </div>
+                <div>
+                    <label for="login-password" class="block text-sm font-medium text-blue-100 mb-1">🔒 Password</label>
+                    <input type="password" id="login-password" placeholder="Your secret password" class="input-field"
+                        required>
+                </div>
+                <button type="submit" id="login-btn" class="btn-primary w-full">
+                    🚀 Log In!
+                </button>
+            </form>
+
+            <!-- Link to sign up if you don't have an account -->
+            <p class="text-center text-blue-200 mt-6 text-sm">
+                Don't have an account?
+                <a href="#" id="show-signup" class="text-yellow-300 font-semibold hover:underline">Sign Up Here!</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- ========================================= -->
+    <!-- 📝 PAGE 2: THE SIGNUP PAGE (Making a New Account) -->
+    <!-- ========================================= -->
+    <div id="signup-page" class="page hidden">
+        <div class="login-container">
+            <div class="text-center mb-8">
+                <div class="logo-circle">🎉</div>
+                <h1 class="text-3xl font-bold mt-4 text-white">Join SuperBank!</h1>
+                <p class="text-blue-200 mt-2">Create your very own account!</p>
+            </div>
+
+            <form id="signup-form" class="space-y-5">
+                <div>
+                    <label for="signup-name" class="block text-sm font-medium text-blue-100 mb-1">😊 Your Name</label>
+                    <input type="text" id="signup-name" placeholder="e.g. Alex" class="input-field" required>
+                </div>
+                <div>
+                    <label for="signup-email" class="block text-sm font-medium text-blue-100 mb-1">📧 Email</label>
+                    <input type="email" id="signup-email" placeholder="e.g. alex@superbank.com" class="input-field"
+                        required>
+                </div>
+                <div>
+                    <label for="signup-password" class="block text-sm font-medium text-blue-100 mb-1">🔒
+                        Password</label>
+                    <input type="password" id="signup-password" placeholder="Make a secret password (6+ letters)"
+                        class="input-field" required minlength="6">
+                </div>
+                <button type="submit" id="signup-btn" class="btn-primary w-full">
+                    🎉 Create My Account!
+                </button>
+            </form>
+
+            <p class="text-center text-blue-200 mt-6 text-sm">
+                Already have an account?
+                <a href="#" id="show-login" class="text-yellow-300 font-semibold hover:underline">Log In Here!</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- ========================================= -->
+    <!-- 🏠 PAGE 3: THE DASHBOARD (The Main Room) -->
+    <!-- ========================================= -->
+    <div id="dashboard-page" class="page hidden">
+
+        <!-- Top bar with welcome message, notifications, and logout -->
+        <nav class="dashboard-nav relative">
+            <div class="flex items-center gap-3">
+                <span class="text-2xl">🏦</span>
+                <span class="font-bold text-lg text-white">SuperBank</span>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <!-- 🔔 User Notifications -->
+                <div class="relative">
+                    <button id="notif-btn" class="text-2xl hover:scale-110 transition cursor-pointer relative">
+                        🔔
+                        <span id="notif-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center hidden">!</span>
+                    </button>
+                    <!-- Dropdown -->
+                    <div id="notif-dropdown" class="hidden absolute right-0 mt-3 w-72 bg-gray-800 border border-gray-700 rounded-xl shadow-2xl z-50 overflow-hidden">
+                        <div class="bg-gray-700 font-bold text-sm px-4 py-2 border-b border-gray-600">Admin Messages</div>
+                        <div id="notif-list" class="max-h-64 overflow-y-auto w-full">
+                            <p class="text-gray-400 text-sm text-center py-4">No new messages.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <span id="welcome-name" class="text-blue-200 text-sm">Hi, Friend!</span>
+                <button id="logout-btn" class="btn-logout">👋 Log Out</button>
+            </div>
+        </nav>
+
+        <!-- Main content area -->
+        <main class="dashboard-main">
+
+            <!-- 💰 Balance Card - Shows how much money you have -->
+            <div class="balance-card">
+                <p class="text-blue-100 text-sm font-medium">Your Total Balance 💰</p>
+                <h2 id="balance-amount" class="text-5xl font-extrabold text-white mt-2">₦0.00</h2>
+                <p class="text-blue-200 text-xs mt-2">Account is looking great! ✨</p>
+            </div>
+
+            <!-- 🎮 Action Buttons - The things you can do! -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
+
+                <!-- Deposit Button (Put money IN) -->
+                <button id="show-deposit" class="action-card">
+                    <span class="action-icon bg-green-500">💵</span>
+                    <span class="font-semibold text-white">Deposit</span>
+                    <span class="text-xs text-gray-400">Put money in</span>
+                </button>
+
+                <!-- Withdraw Button (Take money OUT) -->
+                <button id="show-withdraw" class="action-card">
+                    <span class="action-icon bg-orange-500">🏧</span>
+                    <span class="font-semibold text-white">Withdraw</span>
+                    <span class="text-xs text-gray-400">Take money out</span>
+                </button>
+
+                <!-- Transfer Button (Send money to someone) -->
+                <button id="show-transfer" class="action-card">
+                    <span class="action-icon bg-purple-500">📤</span>
+                    <span class="font-semibold text-white">Transfer</span>
+                    <span class="text-xs text-gray-400">Send to a friend</span>
+                </button>
+            </div>
+
+            <!-- 📜 Transaction History - A list of everything that happened -->
+            <div class="history-section mt-8">
+                <h3 class="text-lg font-bold text-white mb-4">📜 Recent Transactions</h3>
+                <div id="transaction-list" class="space-y-3">
+                    <!-- Transactions will appear here by magic (JavaScript!) -->
+                    <p id="no-transactions" class="text-gray-400 text-sm text-center py-4">No transactions yet. Try
+                        depositing some money! 🚀</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ========================================= -->
+    <!-- 🪟 POPUP MODALS (Little windows that pop up) -->
+    <!-- ========================================= -->
+
+    <!-- 💵 Deposit Modal -->
+    <div id="deposit-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3 class="text-xl font-bold text-white mb-1">💵 Deposit Money</h3>
+            <p class="text-gray-400 text-sm mb-4">How much money do you want to put in?</p>
+            <input type="number" id="deposit-amount" placeholder="e.g. 1000" class="input-field-dark" min="1" required>
+            <div class="flex gap-3 mt-5">
+                <button id="deposit-cancel" class="btn-cancel flex-1">Cancel</button>
+                <button id="deposit-confirm" class="btn-success flex-1">✅ Deposit!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🏧 Withdraw Modal -->
+    <div id="withdraw-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3 class="text-xl font-bold text-white mb-1">🏧 Withdraw Money</h3>
+            <p class="text-gray-400 text-sm mb-4">How much money do you want to take out?</p>
+            <input type="number" id="withdraw-amount" placeholder="e.g. 500" class="input-field-dark" min="1" required>
+            <div class="flex gap-3 mt-5">
+                <button id="withdraw-cancel" class="btn-cancel flex-1">Cancel</button>
+                <button id="withdraw-confirm" class="btn-danger flex-1">🏧 Withdraw!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 📤 Transfer Modal -->
+    <div id="transfer-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3 class="text-xl font-bold text-white mb-1">📤 Transfer Money</h3>
+            <p class="text-gray-400 text-sm mb-4">Send money to a friend!</p>
+            <input type="email" id="transfer-email" placeholder="Friend's email" class="input-field-dark mb-3" required>
+            <input type="number" id="transfer-amount" placeholder="Amount to send" class="input-field-dark" min="1"
+                required>
+            <div class="flex gap-3 mt-5">
+                <button id="transfer-cancel" class="btn-cancel flex-1">Cancel</button>
+                <button id="transfer-confirm" class="btn-primary flex-1">📤 Send!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🔔 Toast Notification (A little message that pops up) -->
+    <div id="toast" class="toast hidden">
+        <span id="toast-message">Something happened!</span>
+    </div>
+
+    <!-- 🔥 Firebase SDK - Our magic cloud backpack! -->
+    <script type="module" src="app.js"></script>
+</body>
+
+</html>
